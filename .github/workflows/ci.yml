@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pylint
+    
+    - name: Lint Python files
+      run: |
+        # Stop on syntax errors or undefined names
+        flake8 scripts/*.py test_data/*.py --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Exit-zero treats all errors as warnings
+        flake8 scripts/*.py test_data/*.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    
+    - name: Lint Shell scripts
+      run: |
+        sudo apt-get install shellcheck
+        shellcheck scripts/*.sh || true
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r test_data/requirements_test.txt
+    
+    - name: Test sample data generation
+      run: |
+        cd test_data
+        python create_sample_delta_tables.py --customers 100 --orders 500 --products 50
+        ls -R sample_delta_tables/
+    
+    - name: Verify Delta structure
+      run: |
+        cd test_data
+        # Check for Delta log files
+        test -f sample_delta_tables/customers/_delta_log/00000000000000000000.json
+        test -f sample_delta_tables/orders/_delta_log/00000000000000000000.json
+        test -f sample_delta_tables/products/_delta_log/00000000000000000000.json
+        echo "✓ Delta log files verified"
+
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check documentation files
+      run: |
+        test -f README.md
+        test -f QUICKSTART.md
+        test -f TROUBLESHOOTING.md
+        test -f CONTRIBUTING.md
+        test -f CODE_OF_CONDUCT.md
+        test -f LICENSE
+        echo "✓ All documentation files present"
+    
+    - name: Check for broken links (optional)
+      run: |
+        echo "Skipping link check - implement if needed"

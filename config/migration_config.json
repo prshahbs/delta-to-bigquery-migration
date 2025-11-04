@@ -1,0 +1,23 @@
+[
+  {
+    "gcs_delta_path": "gs://your-bucket/delta-tables/customers",
+    "bq_project": "your-project-id",
+    "bq_dataset": "analytics",
+    "bq_table": "customers",
+    "temp_bucket": "your-temp-bucket"
+  },
+  {
+    "gcs_delta_path": "gs://your-bucket/delta-tables/orders",
+    "bq_project": "your-project-id",
+    "bq_dataset": "analytics",
+    "bq_table": "orders",
+    "temp_bucket": "your-temp-bucket"
+  },
+  {
+    "gcs_delta_path": "gs://your-bucket/delta-tables/products",
+    "bq_project": "your-project-id",
+    "bq_dataset": "analytics",
+    "bq_table": "products",
+    "temp_bucket": "your-temp-bucket"
+  }
+]

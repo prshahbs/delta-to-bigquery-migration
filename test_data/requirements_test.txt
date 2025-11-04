@@ -1,0 +1,8 @@
+# Requirements for Sample Delta Table Generation
+# Install these packages to generate test data locally
+
+pyspark==3.4.0
+delta-spark==2.4.0
+
+# Optional: For better progress bars and formatting
+tqdm==4.66.1

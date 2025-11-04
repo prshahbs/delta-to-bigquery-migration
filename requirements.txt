@@ -1,0 +1,15 @@
+# Python Requirements for Delta to BigQuery Migration
+# Note: These are installed automatically on Dataproc via initialization actions
+
+# Core dependencies
+google-cloud-bigquery==3.11.0
+google-cloud-storage==2.10.0
+google-cloud-bigquery-storage==2.20.0
+
+# Spark dependencies are installed via Maven packages in cluster configuration:
+# - io.delta:delta-core_2.12:2.4.0
+# - com.google.cloud.spark:spark-bigquery-with-dependencies_2.12:0.32.2
+
+# For local testing/development only (not needed on Dataproc):
+# pyspark==3.4.0
+# delta-spark==2.4.0
